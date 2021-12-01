@@ -12,33 +12,27 @@
 
 
 
-#### load packages ####
-library(here)
-
-
-#### define paths etc ####
-DIR_PROJECT <- paste0(here(),"/")
-DIR_INPUT   <- paste0(DIR_PROJECT,"rawdata/")
-DIR_FIG   	<- paste0(DIR_PROJECT,"figures/")
-
-# output of this script will be put in the rawdata dir
-DIR_DAT_OUT  <- paste0(DIR_PROJECT,"rawdata/")
+#### process user input ####
+args <- commandArgs(TRUE)
+sample.to.study.file <- args[1] # ex: "rawdata/annotation_data.txt"
+cells.to.count.file  <- args[2] # ex: "rawdata/cell_types_vs_index.txt"
+study.set.outfile    <- args[3] # ex: "rawdata/study_sets.txt"
 
 
 
 #### Read in annotation data etc ####
 # samples vs studies vs cell type
-file <- paste0(DIR_INPUT,"annotation_data.txt")
-final_anno <- read.table(file, sep="\t", row.names=1, header=T, quote="\"")
+final_anno <- read.table(annotation.file, sep="\t", row.names=1, header=T, quote="\"")
 
 # cell type vs sample count
-file <- paste0(DIR_INPUT,"cell_types_vs_index.txt")
-cell2sample_count <- read.table(file, sep="\t", header=T)
+cell2sample_count <- read.table(cells.to.count.file, sep="\t", header=T)
+
+
 
 #### Some simple processing ####
 # retain only cell types with at least 10 samples
-cells <- cell2sample_count$cell_or_tissue[ cell2sample_count$sample_count >=10]
-final_anno <- subset(final_anno,is.element(final_anno[,2],cells))
+cells <- cell2sample_count$cell_or_tissue[ cell2sample_count$sample_count >= 10]
+final_anno <- subset(final_anno, is.element(final_anno[,2],cells))
 studies    <- unique(final_anno$study_id)
 
 
@@ -46,7 +40,7 @@ studies    <- unique(final_anno$study_id)
 #### Separate the studies into sets with overlapping cell types ####
 studies_copy <- studies
 set_index <- 1
-sets <- rep(0,length(studies))
+sets <- rep(0, length(studies))
 names(sets)<-as.character(studies)
 while(length(studies_copy)>0){
 
@@ -70,8 +64,6 @@ while(length(studies_copy)>0){
 		in_set <- unique(c(studies_tmp,in_set))
 
 	}
-
-
 	sets[as.character(in_set)] <- set_index
 	studies_copy <- setdiff(studies_copy,in_set)
 	set_index <- set_index + 1
@@ -81,5 +73,4 @@ while(length(studies_copy)>0){
 
 
 #### write output ####
-outfile <- paste0(DIR_DAT_OUT,"study_sets.txt")
-write.table(file=outfile, sets, col.names=F, quote=F, sep="\t")
+write.table(file = study.set.outfile, sets, col.names = FALSE, quote = FALSE, sep = "\t")
