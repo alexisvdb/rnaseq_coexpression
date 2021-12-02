@@ -138,8 +138,8 @@ ncbi.ids <- sort(as.numeric(unique(ensembl2entrez[,2])))
 
 #### save output ####
 write.table(file = output.expression.data.file, target.processed.data, sep = "\t", quote = FALSE)
-write.table(file=output.gene.file, genes.retained, quote=FALSE, row.names=FALSE, col.names=FALSE)
-write.table(file=output.gene.to.ncbi.id.file, ensembl2entrez, quote=FALSE, row.names=FALSE, col.names=FALSE, sep="\t")
-write.table(file=output.ncbi.id.file, ncbi.ids, quote=FALSE, row.names=FALSE, col.names=FALSE, sep="\t")
+write.table(file = output.gene.file, genes.retained, quote=FALSE, row.names=FALSE, col.names=FALSE)
+write.table(file = output.gene.to.ncbi.id.file, ensembl2entrez, quote=FALSE, row.names=FALSE, col.names=FALSE, sep="\t")
+write.table(file = output.ncbi.id.file, ncbi.ids, quote=FALSE, row.names=FALSE, col.names=FALSE, sep="\t")
 
 
