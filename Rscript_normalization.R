@@ -13,7 +13,7 @@ normalization.method <- args[2] # ex: "rlog"
 outfile              <- args[3] # ex: "dat_norm_rlog_log10.txt"
 
 # allowed values 
-normalization.allowed <- c("quantile", "rlog", "cpm", "tmm", "med", "uq, none")
+normalization.allowed <- c("quantile", "rlog", "cpm", "tmm", "med", "uq", "none")
 
 # check if input values are allowed values
 if(!normalization.method %in% normalization.allowed){
