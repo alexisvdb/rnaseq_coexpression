@@ -1,5 +1,5 @@
 ---
-title: Evaluation of critical data processing steps for reliable prediction of gene co-expression from large collections of RNA-seq data
+title: "Evaluation of critical data processing steps for reliable prediction of gene co-expression from large collections of RNA-seq data"
 ---
 
 # Citation
