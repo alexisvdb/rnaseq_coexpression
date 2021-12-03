@@ -6,7 +6,7 @@ This code accompanies the paper "Evaluation of critical data processing steps fo
 This code includes R, C, and some Perl scripts. Code has been written with as few dependencies as possible, and using base R wherever possible. 
 
 ## Input data
-A few of the input datasets are also included in this repository. Larger datasets for both human and mouse RNA-seq samples can be found on figshare, with DOIs doi.org/10.6084/m9.figshare.14178446.v1 and doi.org/10.6084/m9.figshare.14178425.v1. These datasets include: 
+A few of the input datasets are also included in this repository. Larger datasets for both human and mouse RNA-seq samples can be found on figshare, with DOIs [doi.org/10.6084/m9.figshare.14178446.v1](https://figshare.com/articles/dataset/Human_data/14178446/1) and [doi.org/10.6084/m9.figshare.14178425.v1](https://figshare.com/articles/dataset/Mouse_data/14178425/1). These datasets include: 
 
 1. raw read counts of genes in all RNA-seq samples
 2. the same RNA-seq data after UQ normalization and batch effect correction using ComBat, which is in general the best workflow according to our study
