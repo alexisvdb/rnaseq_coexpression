@@ -5,24 +5,26 @@ This code accompanies the paper "Evaluation of critical data processing steps fo
 
 This code includes R, C, and some Perl scripts. Code has been written with as few dependencies as possible, and using base R wherever possible. 
 
-## Input data
+
+## Summary of the workflow
+For details, please refer to the paper mentioned above. In brief, this code allows you to: 
+
+- [Step 0: get the main input data](#step-0-input-data)
+- [Step 1: normalize a large RNA-seq gene expression dataset](#step-1-normalization)
+- [Step 2: split the samples into sets](#step-2-split-the-samples-into-sets)
+- [Step 3: remove batch effects](#step-3-batch-effect-correction)
+- [Step 4: extract the data for a particular cell type or tissue](#step-4-extract-the-data-for-a-particular-cell-type-or-tissue)
+- [Step 5: calculation of gene-gene coexpression](#step-5-calculation-of-gene-gene-coexpression)
+- [Step 6: GO term and TFBS enrichment analysis](#step-6-go-term-and-tfbs-enrichment-analysis)
+
+
+## Step 0: Input data
 A few of the smaller input files are included in this repository as an example (see dir example_input). Larger datasets for both human and mouse RNA-seq samples can be found on figshare, with DOIs [doi.org/10.6084/m9.figshare.14178446.v1](https://figshare.com/articles/dataset/Human_data/14178446/1) and [doi.org/10.6084/m9.figshare.14178425.v1](https://figshare.com/articles/dataset/Mouse_data/14178425/1). These datasets include: 
 
 1. raw read counts of genes in all RNA-seq samples
 2. the same RNA-seq data after UQ normalization and batch effect correction using ComBat, which is in general the best workflow according to our study
 3. annotation data assigning a study ID and cell type or tissue to each sample
 4. a list of each cell type or tissue included in the datasets along with its sample count.
-
-
-## Summary of the workflow
-For details, please refer to the paper mentioned above. In brief, this code allows you to 
-
-1. [normalize a large RNA-seq gene expression dataset](#step-1-normalization)
-2. [split the samples into sets](#step-2-split-the-samples-into-sets)
-3. [remove batch effects](#step-3-remove-batch-effects)
-4. [extract the data for a particular cell type or tissue](#step-4-extract-the-data-for-a-particular-cell-type-or-tissue)
-5. [calculation of gene-gene coexpression](#step-5-calculation-of-gene-gene-coexpression)
-6. [GO term and TFBS enrichment analysis](#step-6-go-term-and-tfbs-enrichment-analysis)
 
 
 ## Step 1: Normalization
