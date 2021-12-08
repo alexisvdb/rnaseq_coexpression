@@ -133,18 +133,18 @@ To calculate the gene-gene coexpression values, we need to run the `process_to_c
 
 Example usage:
 ```{bash}
-./bin_massCorrelation/process_combat.sh <expression_data> <binary_correlation_file>
+./bin_massCorrelation/process_to_correlation.sh <expression_data> <binary_correlation_file>
 ```
 The `<expression_data>` is the cell type or tissue-specific data which we prepared in Step 4. The output is correlation values in a binary format, in `<binary_correlation_file>`. For our data, each binary output file is about 1 GB in size.
 
 Example usage on the human liver data:
 ```{bash}
-./bin_massCorrelation/process_combat.sh data_liver.txt liver_correlation_pearson.bin
+./bin_massCorrelation/process_to_correlation.sh data_liver.txt liver_correlation_pearson.bin
 ```
 
 Similarly, we can get the Spearman correlation by using the ranked data as input:
 ```{bash}
-./bin_massCorrelation/process_combat.sh data_liver_RANKED.txt liver_correlation_spearman.bin
+./bin_massCorrelation/process_to_correlation.sh data_liver_RANKED.txt liver_correlation_spearman.bin
 ```
 
 
