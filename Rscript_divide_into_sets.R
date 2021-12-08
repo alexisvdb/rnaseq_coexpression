@@ -14,7 +14,7 @@
 
 #### process user input ####
 args <- commandArgs(TRUE)
-sample.to.study.file <- args[1] # ex: "rawdata/annotation_data.txt"
+annotation.file      <- args[1] # ex: "rawdata/annotation_data.txt"
 cells.to.count.file  <- args[2] # ex: "rawdata/cell_types_vs_index.txt"
 study.set.outfile    <- args[3] # ex: "rawdata/study_sets.txt"
 
