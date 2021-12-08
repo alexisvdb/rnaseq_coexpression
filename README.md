@@ -23,6 +23,7 @@ For details, please refer to the paper mentioned above. In brief, this code allo
 4. extract the data for a particular cell type or tissue
 5. calculation of gene-gene coexpression
 6. GO term and TFBS enrichment analysis
+[link](#step-6-go-term-and-tfbs-enrichment-analysis)
 
 
 ## Step 1: Normalization
@@ -216,7 +217,7 @@ Various input datasets were obtained:
 - Human gene annotation data: goa_human.gaf from [the EBI database] (ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/HUMAN/goa_human.gaf.gz)
 - Mouse gene annotation data: gene_association.mgi from [the Mouse Genome Informatics website](http://www.informatics.jax.org/)
 
-Other processed input data was obtained from Vandenbon et al., PNAS, 2016: a mapping of GO terms to their parent terms (`go_mapped_to_tree_MF.txt`, `go_mapped_to_tree_BP.txt`, and `go_mapped_to_tree_CC.txt`).
+Other processed input data was obtained from [Vandenbon et al., PNAS, 2016](https://www.pnas.org/content/113/17/E2393): a mapping of GO terms to their parent terms (`go_mapped_to_tree_MF.txt`, `go_mapped_to_tree_BP.txt`, and `go_mapped_to_tree_CC.txt`).
 
 In Step 4 we extracted data for our cell type and tissue of interest, which also involved filtering out genes with very low expression values in that cell type or tissue. As a result, our data does not include all genes. For the GO term enrichment analysis too, we want to focus only on genes that are present in our data. Some filtering is necessary.
 
@@ -263,11 +264,11 @@ This should be done for each of the (about 20) sets of 1000 Entrez IDs.
 
 ### Step 6.4: Preparing TFBS data
 
-Various data (originally from Vandenbon et al., PNAS, 2016) is located in direcotry `TFBS/`. That direcotry also includes a `Readme.txt` file with a short explanation of each file.
+Various data (originally from [Vandenbon et al., PNAS, 2016](https://www.pnas.org/content/113/17/E2393)) is located in directory `TFBS/`. That directory also includes a `Readme.txt` file with a short explanation of each file.
 
 In brief, the data includes processed data about predicted transcription factor binding sites (TFBSs), based on [JASPAR](https://jaspar.genereg.net/) position-specific weight matrices, in the promoter regions of human and mouse genes.
 
-Human and mouse promoters can be roughly divided into 2 classes: a class with high GC content and CpG scores, and a class with low GC content and CpG scores. To avoid biases in the TFBS prediction analysis caused by GC content, these classes are taken into account (see Vandenbon et al., PNAS, 2016).
+Human and mouse promoters can be roughly divided into 2 classes: a class with high GC content and CpG scores, and a class with low GC content and CpG scores. To avoid biases in the TFBS prediction analysis caused by GC content, these classes are taken into account (see [Vandenbon et al., PNAS, 2016](https://www.pnas.org/content/113/17/E2393)).
 
 
 ### Step 6.5: Running TFBS enrichment analysis
