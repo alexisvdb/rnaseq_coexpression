@@ -1,0 +1,85 @@
+index	cell_or_tissue	sample_count
+1	fibroblast	645
+2	ileum	623
+3	lymphoblastoid	481
+4	breast cancer	427
+5	acute myeloid leukemia	402
+6	PBMC	376
+7	lung	321
+8	liver	292
+9	epithelial cell	268
+10	brain	244
+11	pancreas	228
+12	colon	210
+13	B cell	199
+14	monocyte	193
+15	induced pluripotent stem cell	187
+16	skeletal muscle	170
+17	embryonic stem cell	169
+18	macrophage	169
+19	prostate	163
+20	colon cancer	150
+21	bone marrow	143
+22	CD4 T cell	135
+23	lung cancer	135
+24	prefrontal cortex	129
+25	heart	113
+26	breast	111
+27	neural progenitor cell	98
+28	melanoma	97
+29	placenta	86
+30	embryonic kidney	74
+31	neuron	72
+32	granulocyte	70
+33	osteosarcoma	67
+34	adipose tissue	66
+35	kidney	62
+36	MCF-7	59
+37	endothelial cell	58
+38	HeLa	56
+39	CD8 T cell	51
+40	ovarian cancer	51
+41	cervical cancer	50
+42	lymphoma	49
+43	hepatocyte	48
+44	neutrophil	46
+45	salivary gland	46
+46	HUVEC	45
+47	keratinocyte	45
+48	frontal cortex	44
+49	mammary gland	44
+50	thyroid	43
+51	esophagus	41
+52	ovary	38
+53	osteoblast	37
+54	pluripotent stem cell	35
+55	prostate cancer	29
+56	cerebellum	28
+57	dendritic cell	28
+58	retina	28
+59	thyroid cancer	28
+60	CLL	27
+61	sarcoma	27
+62	adipocyte	26
+63	mesenchymal stem cell	25
+64	white adipose tissue	24
+65	natural killer cell	23
+66	cancer	21
+67	cerebral cortex	21
+68	neocortex	20
+69	plasmacytoid dendritic cell	17
+70	mesothelial cells	16
+71	stomach	16
+72	brown adipose tissue	15
+73	pre-B	14
+74	trachea	13
+75	testis	12
+76	coronary artery	11
+77	thymus	11
+78	Treg	11
+79	chondrocyte	10
+80	renal cortex	10
+81	small intestine	10
+82	spleen	7
+83	large intestine	6
+84	spinal cord	1

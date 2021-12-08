@@ -23,7 +23,7 @@ output.expression.data.file		 = args[10]
 
 
 #### check user input ####
-if(!is.logical(process.to.ranks)){
+if(process.to.ranks!="TRUE" & process.to.ranks!="FALSE"){
   stop("'process.to.ranks' must be either TRUE or FALSE")
 }
 if(!file.exists(raw.read.count.file)){
@@ -36,7 +36,7 @@ if(!file.exists(sample.annotation.file)){
   stop("Can't find 'sample.annotation.file' (\"",sample.annotation.file,"\"). Check your input.")
 }
 
-
+process.to.ranks = as.logical(process.to.ranks)
 
 #### read in data ####
 
