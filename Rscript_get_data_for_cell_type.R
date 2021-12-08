@@ -16,8 +16,8 @@ target.cell.type 	             = args[4]
 biomart.file			             = args[5]
 process.to.ranks	             = args[6]
 output.gene.file               = args[7]
-output_entrez_id_file 	       = args[8]
-output.gene.to.ncbi.id.file    = args[9]
+output.entrez.id.file 	       = args[8]
+output.gene.to.entrez.id.file  = args[9]
 output.expression.data.file		 = args[10]
 
 
@@ -139,7 +139,7 @@ ncbi.ids <- sort(as.numeric(unique(ensembl2entrez[,2])))
 #### save output ####
 write.table(file = output.expression.data.file, target.processed.data, sep = "\t", quote = FALSE)
 write.table(file = output.gene.file, genes.retained, quote=FALSE, row.names=FALSE, col.names=FALSE)
-write.table(file = output.gene.to.ncbi.id.file, ensembl2entrez, quote=FALSE, row.names=FALSE, col.names=FALSE, sep="\t")
-write.table(file = output.ncbi.id.file, ncbi.ids, quote=FALSE, row.names=FALSE, col.names=FALSE, sep="\t")
+write.table(file = output.gene.to.entrez.id.file, ensembl2entrez, quote=FALSE, row.names=FALSE, col.names=FALSE, sep="\t")
+write.table(file = output.entrez.id.file, ncbi.ids, quote=FALSE, row.names=FALSE, col.names=FALSE, sep="\t")
 
 
