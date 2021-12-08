@@ -261,6 +261,29 @@ Rscript Rscript_GO_enrichment.R temp_split_ncbi/ncbi_00 binary_files_split_per_g
 ```
 This should be done for each of the (about 20) sets of 1000 Entrez IDs.
 
+### Step 6.4: Preparing TFBS data
+
+Various data (originally from Vandenbon et al., PNAS, 2016) is located in direcotry `TFBS/`. That direcotry also includes a `Readme.txt` file with a short explanation of each file.
+
+In brief, the data includes processed data about predicted transcription factor binding sites (TFBSs), based on [JASPAR](https://jaspar.genereg.net/) position-specific weight matrices, in the promoter regions of human and mouse genes.
+
+Human and mouse promoters can be roughly divided into 2 classes: a class with high GC content and CpG scores, and a class with low GC content and CpG scores. To avoid biases in the TFBS prediction analysis caused by GC content, these classes are taken into account (see Vandenbon et al., PNAS, 2016).
 
 
+### Step 6.5: Running TFBS enrichment analysis
 
+TFBS enrichment is done using the shell script `top100_refseq_motif_enrichment.sh`.
+
+Example usage:
+```{bash}
+./top100_refseq_motif_enrichment.sh <entrez_file> <bin_split_dir> <all_entrez_list> <entrez_to_refseq> <output_dir> <final_output_file> <present_refseq_file> <gc_cluster_file> <tfbs_map_file> <gc_class_stats>
+```
+
+Similar to `Rscript_GO_enrichment.R` (see Step 6.3), this script is run on the sets of 1000 Entrez ids which we prepared in Step 6.1. `<entrez_file>` is one of the sets of 1000 Entrez ids. `<bin_split_dir>` is the directory where we put the many small files with binary correlation data, split per gene. `<entrez_to_refseq>` is a mapping between Entrez and Refseq ids, which can be found under directory `TFBS/` along with other files.
+
+For the first set of 1000 Entrez ids (in file `temp_split_ncbi/ncbi_00`), the command would be:
+```{bash}
+mkdir tmp_TFBS_output # make a temporary directory for the output files
+./top100_refseq_motif_enrichment.sh temp_split_ncbi/ncbi_00 binary_files_split_per_gene ncbi_gene_list.txt TFBS/entrez2unique_refseqs_human.txt tmp_TFBS_output/ tmp_TFBS_output/tfbs_00 TFBS/present_refseq_ids_human.txt TFBS/k2_GC_CpG_clusters_human.txt TFBS/map_tfbs_presence_human.txt TFBS/GcClass_stats_human.txt
+```
+This should be done for each of the (about 20) sets of 1000 Entrez IDs.
