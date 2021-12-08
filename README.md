@@ -21,6 +21,7 @@ For details, please refer to the paper mentioned above. In brief, this code allo
 2. split the samples into sets
 3. remove batch effects
 4. extract the data for a particular cell type or tissue
+5. calculation of gene-gene coexpression
 
 ### Step 1: Normalization
 Read in the entire (human or mouse) dataset and normalize it using a method of choice ("quantile", "rlog", "cpm", "tmm", "med", "uq", or  "none"). Output are normalized values (log10).
@@ -30,7 +31,7 @@ Example usage:
 Rscript Rscript_normalization.R <input_count_file> <normalization_method> <normalized_output_file>
 ```
 
-Example: normalize the 8,796 human RNA-seq samples using Upper Quartile ("uq") normalization, and output to dat_norm_uq_log10.txt.
+Example: normalize the 8,796 human RNA-seq samples using Upper Quartile ("uq") normalization, and output to `dat_norm_uq_log10.txt`.
 ```{bash}
 Rscript Rscript_normalization.R raw_count_data_filtered.txt uq dat_norm_uq_log10.txt
 ```
@@ -50,9 +51,9 @@ Example usage:
 Rscript Rscript_divide_into_sets.R <sample_annotation> <cell_types> <study_set_file>
 ```
 
-The output is in <study_set_file>, in which each sample will have been assigned to a set.
+The output is in `<study_set_file>`, in which each sample will have been assigned to a set.
 
-Under example_input/ there is example input for our human dataset.
+Under `example_input/` there is example input for our human dataset.
 
 ```{bash}
 Rscript Rscript_divide_into_sets.R example_input/annotation_data.txt example_input/cell_types_vs_index.txt study_sets.txt
@@ -82,20 +83,20 @@ Steps 1 and 3 can be used to obtain the processed data for several combinations 
 
 After normalization and batch effect correction, let's extract the data for a particular cell type or tissue. That data will later on be used for estimating gene co-expression in that tissue/cell type.
 
-The script Rscript_get_data_for_cell_type.R not only extracts that data we want, but also outputs several other files that will be used in the downstream analysis. It has several input parameters and output files:
+The script `Rscript_get_data_for_cell_type.R` not only extracts that data we want, but also outputs several other files that will be used in the downstream analysis. It has several input parameters and output files:
 
-- raw.read.count.file = the file with the raw (not normalized) read coutns per gene per samples
-- processed.expression.file = the file with the normalized and/or batch effect corrected data
-- sample.annotation.file = annotation data for each samples
-- target.cell.type = the cell type or tissue of interest
-- biomart.file = a mapping between Ensembl gene ids and Entrez (NCBI) gene ids
-- process.to.ranks = "TRUE" or "FALSE". See explanation below
-- output.gene.file = output file for a list of Ensembl gene ids that are present in the final data
-- output_entrez_id_file = output file for a list of Entrez (NCBI) gene ids that are present in the final data
-- output.gene.to.ncbi.id.file = output file with a mapping between Ensembl and Entrez ids
-- output.expression.data.file = output file for the gene expression data for the cell type or tissue of interest
+- `raw.read.count.file` = the file with the raw (not normalized) read counts per gene per samples
+- `processed.expression.file` = the file with the normalized and/or batch effect corrected data
+- `sample.annotation.file` = annotation data for each samples
+- `target.cell.type` = the cell type or tissue of interest
+- `biomart.file` = a mapping between Ensembl gene ids and Entrez (NCBI) gene ids
+- `process.to.ranks` = "TRUE" or "FALSE". See explanation below
+- `output.gene.file` = output file for a list of Ensembl gene ids that are present in the final data
+- `output_entrez_id_file` = output file for a list of Entrez (NCBI) gene ids that are present in the final data
+- `output.gene.to.ncbi.id.file` = output file with a mapping between Ensembl and Entrez ids
+- `output.expression.data.file` = output file for the gene expression data for the cell type or tissue of interest
 
-About the "process.to.ranks" input parameter: In Step 5 gene-gene correlation of expression will be calculated using a C script. This script is fast, but can  calculate only Pearson's correlation, not Spearman's correlation. If we want it to calculate Spearman's correlation coefficient, we can convert the gene expression data first to ranks, by setting "process.to.ranks" to "TRUE". Giving this rank data as input to the C script is equivalent to calculating Spearman's correlation.
+About the `process.to.ranks` input parameter: In Step 5 gene-gene correlation of expression will be calculated using a C script. This script is fast, but can  calculate only Pearson's correlation, not Spearman's correlation. If we want it to calculate Spearman's correlation coefficient, we can convert the gene expression data first to ranks, by setting `process.to.ranks` to "TRUE". Giving this rank data as input to the C script is equivalent to calculating Spearman's correlation.
 
 
 Example usage:
@@ -112,6 +113,38 @@ Rscript Rscript_get_data_for_cell_type.R raw_count_data_filtered.txt dat_uq_comb
 Or, alternatively, if we are interested in Spearman's correlation, we should set FALSE to TRUE, and get the ranked data:
 ```{bash}
 Rscript Rscript_get_data_for_cell_type.R raw_count_data_filtered.txt dat_uq_combat_rlog_log10.txt example_input/annotation_data.txt liver example_input/mart_export_human.txt TRUE ensembl_gene_list.txt ncbi_gene_list.txt ensembl_to_ncbi_table.txt data_liver_RANKED.txt
+```
+
+
+### Step 5: Calculation of gene-gene coexpression
+
+Directory `src_massCorrelation/` contains several C scripts for calculating correlation of expression between pairs of gene on a genome-wide scale. 
+
+To compile the C code, prepare a directory `bin_massCorrelation/` and run `make` inside the `src_massCorrelation directory`. Finally, we need to copy the shell script `process_to_correlation.sh` to the `bin_massCorrelation/` directory.
+
+```{bash}
+mkdir bin_massCorrelation
+cd src_massCorrelation/
+make
+cp process_to_correlation.sh ../bin_massCorrelation/
+```
+
+To calculate the gene-gene coexpression values, we need to run the `process_to_correlation.sh` script.
+
+Example usage:
+```{bash}
+./bin_massCorrelation/process_combat.sh <expression_data> <binary_correlation_file>
+```
+The `<expression_data>` is the cell type or tissue-specific data which we prepared in Step 4. The output is correlation values in a binary format, in `<binary_correlation_file>`. For our data, each binary output file is about 1 GB in size.
+
+Example usage on the human liver data:
+```{bash}
+./bin_massCorrelation/process_combat.sh data_liver.txt liver_correlation_pearson.bin
+```
+
+Similarly, we can get the Spearman correlation by using the ranked data as input:
+```{bash}
+./bin_massCorrelation/process_combat.sh data_liver_RANKED.txt liver_correlation_spearman.bin
 ```
 
 
