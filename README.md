@@ -254,7 +254,7 @@ Rscript Rscript_GO_enrichment.R <ncbi.subset.file> <bin.data.dir> <outfile> <go.
 ```
 The `<ncbi.subset.file>` refers to the sets of 1000 gene ids which we prepared in Step 6.1. `<bin.data.dir>` refers to the directory that includes the many small binary correlation files, one for each Entrez gene. `<go.data.dir>` is the directory where the GO-related data is located (See step 6.2).
 
-For the first set of 1000 Entrez ids (in file temp_split_ncbi/ncbi_00), the command would be:
+For the first set of 1000 Entrez ids (in file `temp_split_ncbi/ncbi_00`), the command would be:
 ```{bash}
 mkdir tmp_GO_output # make a temporary dir to put all GO related results
 Rscript Rscript_GO_enrichment.R temp_split_ncbi/ncbi_00 binary_files_split_per_gene tmp_GO_output/go_00 GO/ GO/total.go.count_file ncbi_gene_list.txt
