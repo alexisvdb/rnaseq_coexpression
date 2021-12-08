@@ -17,13 +17,12 @@ A few of the smaller input files are included in this repository as an example (
 ## Summary of the workflow
 For details, please refer to the paper mentioned above. In brief, this code allows you to 
 
-1. normalize a large RNA-seq gene expression dataset
-2. split the samples into sets
-3. remove batch effects
-4. extract the data for a particular cell type or tissue
-5. calculation of gene-gene coexpression
-6. GO term and TFBS enrichment analysis
-[link](#step-6-go-term-and-tfbs-enrichment-analysis)
+1. [normalize a large RNA-seq gene expression dataset](#step-1-normalization)
+2. [split the samples into sets](#step-2-split-the-samples-into-sets)
+3. [remove batch effects](#step-3-remove-batch-effects)
+4. [extract the data for a particular cell type or tissue](#step-4-extract-the-data-for-a-particular-cell-type-or-tissue)
+5. [calculation of gene-gene coexpression](#step-5-calculation-of-gene-gene-coexpression)
+6. [GO term and TFBS enrichment analysis](#step-6-go-term-and-tfbs-enrichment-analysis)
 
 
 ## Step 1: Normalization
