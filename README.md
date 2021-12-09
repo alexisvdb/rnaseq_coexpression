@@ -16,6 +16,9 @@ For details, please refer to the paper mentioned above. In brief, this code allo
 - [Step 4: extract the data for a particular cell type or tissue](#step-4-extract-the-data-for-a-particular-cell-type-or-tissue)
 - [Step 5: calculation of gene-gene coexpression](#step-5-calculation-of-gene-gene-coexpression)
 - [Step 6: GO term and TFBS enrichment analysis](#step-6-go-term-and-tfbs-enrichment-analysis)
+- [Step 7: process the enrichment analysis results](#step-7-processing-enrichment-analysis-results)
+
+Scripts for each step are in the `scripts/` directory.
 
 
 ## Step 0: Input data
@@ -289,3 +292,62 @@ mkdir tmp_TFBS_output # make a temporary directory for the output files
 ./top100_refseq_motif_enrichment.sh temp_split_ncbi/ncbi_00 binary_files_split_per_gene ncbi_gene_list.txt TFBS/entrez2unique_refseqs_human.txt tmp_TFBS_output/ tmp_TFBS_output/tfbs_00 TFBS/present_refseq_ids_human.txt TFBS/k2_GC_CpG_clusters_human.txt TFBS/map_tfbs_presence_human.txt TFBS/GcClass_stats_human.txt
 ```
 This should be done for each of the (about 20) sets of 1000 Entrez IDs.
+
+## Step 7: Processing enrichment analysis results
+
+The results from Step 6 need to be processed to a single file, which can then be used for comparing between the different workflows. There are four components:
+
+
+1. For how many genes did we find at least 1 significantly enriched GO term?
+
+Example usage:
+```{bash}
+Rscript  Rscript_process_GO_results.R <prefix_of_our_go_result_files> <output_file>
+```
+For our human liver data:
+```{bash}
+Rscript  Rscript_process_GO_results.R tmp_GO_output/go_ go_uq_combat_liver.txt
+```
+Where `tmp_GO_output/go_` is the prefix which we used for the output of GO enrichment analysis (see Step 6), and `go_uq_combat_liver.txt` is where we will store the result.
+
+
+2. For how many genes did enriched GO terms fit with their known functional annotations?
+
+Example usage:
+```{bash}
+perl GO_enrichment_fit_prior_knowledge.pl <prefix_of_our_go_result_files> ncbi2go_MF.txt ncbi2go_BP.txt ncbi2go_CC.txt > <output_file>
+```
+For our human liver data:
+```{bash}
+perl GO_enrichment_fit_prior_knowledge.pl tmp_GO_output/go_ ncbi2go_MF.txt ncbi2go_BP.txt ncbi2go_CC.txt >prior_go_uq_combat_liver.txt
+```
+Files `ncbi2go_MF.txt`, `ncbi2go_BP.txt`, and `ncbi2go_CC.txt` were prepared in Step 6.2.
+
+
+3. For how many genes did we find at least 1 significantly enriched TFBS motif?
+
+Example usage:
+```{bash}
+Rscript  Rscript_process_TFBS_results.R <prefix_of_our_tfbs_result_files> <output_file>
+```
+
+For our human liver data:
+```{bash}
+Rscript  Rscript_process_TFBS_results.R tmp_TFBS_output/tfbs_ tfbs_uq_combat_liver.txt
+```
+Where `tmp_TFBS_output/tfbs_` is the prefix which we used for the output of TFBS motif analysis (see Step 6), and `tfbs_uq_combat_liver.txt` is where we will store the result.
+
+
+4. For how many genes did enriched TFBS motifs fit with TFBSs in their own promoter sequence?
+
+Example usage:
+```{bash}
+perl TFBS_enrichment_fit_prior_knowledge.pl <prefix_of_our_tfbs_result_files> <tfbs_map_file> <entrez_to_refseq> > <output_file>
+```
+For our human liver data:
+```{bash}
+perl TFBS_enrichment_fit_prior_knowledge.pl tmp_TFBS_output/tfbs_ map_tfbs_presence_human.txt entrez2unique_refseqs_human.txt >prior_tfbs_uq_combat_liver.txt
+```
+
+When these 4 steps are completed for all workflows (all combinations of normalization, batch effect correction, measure of correlation) on all datasets (data for each cell type and tissue), the results can be put together into a large table, and we can move on the last step.
+
