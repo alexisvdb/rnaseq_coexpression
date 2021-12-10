@@ -17,6 +17,7 @@ For details, please refer to the paper mentioned above. In brief, this code allo
 - [Step 5: calculation of gene-gene coexpression](#step-5-calculation-of-gene-gene-coexpression)
 - [Step 6: GO term and TFBS enrichment analysis](#step-6-go-term-and-tfbs-enrichment-analysis)
 - [Step 7: process the enrichment analysis results](#step-7-processing-enrichment-analysis-results)
+- [Step 8: analyze the final results](#step-8-final-analysis)
 
 Scripts for each step are in the `scripts/` directory.
 
@@ -350,4 +351,8 @@ perl TFBS_enrichment_fit_prior_knowledge.pl tmp_TFBS_output/tfbs_ map_tfbs_prese
 ```
 
 When these 4 steps are completed for all workflows (all combinations of normalization, batch effect correction, measure of correlation) on all datasets (data for each cell type and tissue), the results can be put together into a large table, and we can move on the last step.
+
+## Step 8: Final analysis
+
+The collected quality measures of all datasets processed by all workflows can be found in `results/overview_quality_measures.csv`. The R script `Rscript_final_results.R` can be used to reproduce the figures and tables in the manuscript.
 
