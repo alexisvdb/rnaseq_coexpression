@@ -1,3 +1,12 @@
+#### What does this code do? #### 
+
+# This code reads in the raw quality measures for each data, for each data
+# processing workflow. It processes these quality measures to a single quality
+# score, and does downstream analysis. It reproduces the figures shown in the
+# manuscript.
+
+
+
 #### load packages ####
 library(ggplot2)
 library(gplots) # for heatmap.2
