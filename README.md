@@ -1,4 +1,4 @@
-# Evaluation of critical data processing steps for reliable prediction of gene co-expression from large collections of RNA-seq data"
+# Evaluation of critical data processing steps for reliable prediction of gene co-expression from large collections of RNA-seq data
 
 ## Citation
 This code accompanies the paper "Evaluation of critical data processing steps for reliable prediction of gene co-expression from large collections of RNA-seq data" by Alexis Vandenbon (bioRxiv doi: https://doi.org/10.1101/2021.03.11.435043). If you found this code useful in your research, please cite this paper.
