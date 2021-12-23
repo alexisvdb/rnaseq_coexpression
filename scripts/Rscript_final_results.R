@@ -29,8 +29,8 @@ quality.measures.of.interest <- c(
   "tfbs_enrichment", "tfbs_prior"
   )
 
-dat.pca.intput <- dat.raw[,quality.measures.of.interest]
-res.pca <- prcomp(dat.pca.intput,center = T, scale. = T)
+dat.pca.input <- dat.raw[,quality.measures.of.interest]
+res.pca <- prcomp(dat.pca.input,center = T, scale. = T)
 
 # orientation of the PC axes is arbitrary
 # let's make the first axis mostly positive for easier interpretation
@@ -39,13 +39,24 @@ if(mean(res.pca$rotation[,1]<0)>.5){
   res.pca$rotation <- -res.pca$rotation
 }
 summary(res.pca)
-res.pca$rotation
+
+# make plots of loadings
+res.pca$rotation # these are the loadings
+loadings <- res.pca$rotation[# reorder columns to facilitate interpretation
+  c("go_MF_enrichment", "go_BP_enrichment", "go_CC_enrichment", "tfbs_enrichment",
+    "go_MF_prior", "go_BP_prior", "go_CC_prior", "tfbs_prior"
+  ),
+]
+loadings[,1] # loadings for PC1
+barplot(loadings[,1])
+loadings[,2] # loadings for PC1
+barplot(loadings[,2])
 
 # what amount of total variation is explained by each PC?
 pr.var=res.pca$sdev^2
 pve=pr.var/sum(pr.var)
 
-# Fig. S1A
+# Fig. S2A
 plot(pve, xlab="Principal Component", ylab="Proportion of Variance Explained", ylim=c(0,1),type='b')
 
 # PC1 is correlated with ALL raw quality measures. We can use it as a general
@@ -55,28 +66,41 @@ plot(pve, xlab="Principal Component", ylab="Proportion of Variance Explained", y
 # let's also rescale it to the range 0 to 1
 general.quality <- (res.pca$x[,1] - min(res.pca$x[,1])) / (max(res.pca$x[,1]) - min(res.pca$x[,1]))
 
-# make a histogram; Fig. S1D
-ggplot(NULL, aes(general.quality)) + geom_histogram(binwidth = 0.05, colour="white", breaks = seq(0,1,.05)) +
+# make a histogram; Fig. S3AD
+ggplot(NULL, aes(general.quality)) + geom_histogram(binwidth = 0.05, colour="white", breaks = seq(-.025,1,.05)) +
   theme(axis.text=element_text(size=12))
 
 
 # scatterplots of the general score vs the individual measures
-# Fig. S1B-C
-plot(general.quality, dat.pca.intput[,1], pch=20, cex=.6)
-plot(general.quality, dat.pca.intput[,2], pch=20, cex=.6)
-plot(general.quality, dat.pca.intput[,3], pch=20, cex=.6)
-plot(general.quality, dat.pca.intput[,4], pch=20, cex=.6)
-plot(general.quality, dat.pca.intput[,5], pch=20, cex=.6)
-plot(general.quality, dat.pca.intput[,6], pch=20, cex=.6)
-plot(general.quality, dat.pca.intput[,7], pch=20, cex=.6)
-plot(general.quality, dat.pca.intput[,8], pch=20, cex=.6)
+# Fig. S2C-D
+# for PC1 (equivalent to Quality)
+plot(general.quality, dat.pca.input[,1], pch=20, cex=.6)
+plot(general.quality, dat.pca.input[,2], pch=20, cex=.6)
+plot(general.quality, dat.pca.input[,3], pch=20, cex=.6)
+plot(general.quality, dat.pca.input[,4], pch=20, cex=.6)
+plot(general.quality, dat.pca.input[,5], pch=20, cex=.6)
+plot(general.quality, dat.pca.input[,6], pch=20, cex=.6)
+plot(general.quality, dat.pca.input[,7], pch=20, cex=.6)
+plot(general.quality, dat.pca.input[,8], pch=20, cex=.6)
+
+# for PC2
+plot(res.pca$x[,2], dat.pca.input[,1], pch=20, cex=.6)
+plot(res.pca$x[,2], dat.pca.input[,2], pch=20, cex=.6)
+plot(res.pca$x[,2], dat.pca.input[,3], pch=20, cex=.6)
+plot(res.pca$x[,2], dat.pca.input[,4], pch=20, cex=.6)
+plot(res.pca$x[,2], dat.pca.input[,5], pch=20, cex=.6)
+plot(res.pca$x[,2], dat.pca.input[,6], pch=20, cex=.6)
+plot(res.pca$x[,2], dat.pca.input[,7], pch=20, cex=.6)
+plot(res.pca$x[,2], dat.pca.input[,8], pch=20, cex=.6)
 
 
 
-# the Pearson correlation between the general score and the individual measures
-# The correlation values shown in Fig. S1B-C
-apply(dat.pca.intput, 2, function(x) cor(general.quality,x))
-
+# the Pearson correlation between the individual measures and PC1 and PC2
+# The correlation values shown in Fig. S2C-D
+# with PC1
+cor.pc1 <- apply(dat.pca.input, 2, function(x) cor(res.pca$x[,1],x))
+# with PC2
+cor.pc2 <- apply(dat.pca.input, 2, function(x) cor(res.pca$x[,2],x))
 
 
 #### prepare data linear regression ####
@@ -164,7 +188,7 @@ means <- data.frame(
 )
 
 
-# Fig. 3a
+# Fig. 3A
 p <- ggplot(dat.model, aes(x=sample_count, y=quality)) + 
   geom_point(size=.8, colour="dark grey") + 
   scale_x_log10(breaks=c(20,50,100,200,500,1000, 2000,5000), minor_breaks=NULL) + 
@@ -185,25 +209,19 @@ dat.tmm <- subset(dat.model,dat.model$normalization=="tmm")
 dat.med <- subset(dat.model,dat.model$normalization=="med")
 dat.uq <- subset(dat.model,dat.model$normalization=="uq")
 
-# for all datasets
-ggplot(dat.model.no.combatseq, aes(x=normalization, y=quality, fill=normalization)) + 
-  geom_violin() + coord_flip() + 
-  geom_boxplot(width=.3, fill="white") +
-  theme(axis.text=element_text(size=20))
-
-# for small datasets
-# Fig. 3B left side
-ggplot(subset(dat.model.no.combatseq,dat.model.no.combatseq$sample_count<50), aes(x=normalization, y=quality, fill=normalization)) + 
-  geom_violin() + coord_flip() + 
-  geom_boxplot(width=.3, fill="white") +
-  theme(axis.text=element_text(size=20))
-
-# for large datasets
-# Fig. 3B right side
-ggplot(subset(dat.model.no.combatseq,dat.model.no.combatseq$sample_count>=200), aes(x=normalization, y=quality, fill=normalization)) + 
-  geom_violin() + coord_flip() + 
-  geom_boxplot(width=.3, fill="white") +
-  theme(axis.text=element_text(size=20))
+# divide into 3 sets of 36 cell types, according to sample count
+dat.model.no.combatseq$size.type <- rep("medium", nrow(dat.model.no.combatseq))
+dat.model.no.combatseq$size.type[dat.model.no.combatseq$sample_count < 45] <- "small"
+dat.model.no.combatseq$size.type[dat.model.no.combatseq$sample_count >= 112] <- "large"
+dat.model.no.combatseq$size.type <- factor(dat.model.no.combatseq$size.type, levels = c("small", "medium", "large"))
+summary(dat.model.no.combatseq$sample_count[dat.model.no.combatseq$size.type=="small"])
+summary(dat.model.no.combatseq$sample_count[dat.model.no.combatseq$size.type=="medium"])
+summary(dat.model.no.combatseq$sample_count[dat.model.no.combatseq$size.type=="large"])
+ggplot(dat.model.no.combatseq, aes(x=normalization, y=quality, fill=size.type)) + 
+  # geom_violin(position = "dodge") + coord_flip() + 
+  geom_boxplot(width=.8, position = "dodge2") +
+  theme(axis.text=element_text(size=20), legend.position = "none")
+# Fig 3B
 
 
 
@@ -438,7 +456,7 @@ heatmap.2(t(x[rev(o.size),o.q]),
           Rowv=FALSE, Colv=FALSE,dendrogram = "none", 
           scale = "none", col=cols, trace = "none",
           key = FALSE, lhei=c(.2,1), lwid = c(.05,1))
-
+# Fig S4
 
 
 
