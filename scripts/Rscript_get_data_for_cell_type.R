@@ -86,17 +86,29 @@ rm(processed.data)
 rm(raw)
 gc()
 
-# filter out genes with low raw counts or low processed expression values
+
+
+# filter out genes with low raw counts or low processed expression values,
+# or with no variation between samples
+
 # point 1: get the max read count for each gene
 max.tag.count <- apply(target.raw.data,1,max)
 
 # point 2: in how many samples does each gene have really low read counts?
 sample.count.low.tag.count <- apply(target.raw.data < 10,1, sum)
 
+# point 3: get the standard deviation of genes in the raw data and in the
+# processed data
+raw.sds <- apply(target.raw.data,1,sd)
+target.data.sds <- apply(target.processed.data,1,sd)
+
+
 # filter out genes with too low tag counts
 genes.filtered.out <- genes[
   sample.count.low.tag.count > 0.8*sample.count & max.tag.count < 50
   | sample.count.low.tag.count >= 0.9*sample.count
+  | raw.sds==0
+  | target.data.sds==0
 ]
 genes.retained <- setdiff(genes, genes.filtered.out)
 
